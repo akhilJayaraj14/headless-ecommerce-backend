@@ -13,9 +13,9 @@ require __DIR__ . '/../vendor/autoload.php';
 /** @var Application $app */
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
-// Auto-seed in-memory SQLite database for serverless demo if empty
+// Auto-seed database if enabled & driver loaded
 try {
-    if (config('database.default') === 'sqlite' && config('database.connections.sqlite.database') === ':memory:') {
+    if (config('database.default') === 'sqlite' && extension_loaded('pdo_sqlite')) {
         static $bootstrapped = false;
         if (!$bootstrapped) {
             Artisan::call('migrate:fresh', ['--force' => true]);
@@ -24,7 +24,7 @@ try {
         }
     }
 } catch (\Throwable $e) {
-    // Ignore if already seeded
+    // Ignore seeding exceptions in serverless context
 }
 
 $app->handleRequest(Request::capture());
