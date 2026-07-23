@@ -54,13 +54,13 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => explode(',', (string) env('LOG_STACK', 'single')),
+            'channels' => explode(',', (string) env('LOG_STACK', 'stderr')),
             'ignore_exceptions' => false,
         ],
 
         'single' => [
             'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => env('LOG_PATH', storage_path('logs/laravel.log')),
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
         ],

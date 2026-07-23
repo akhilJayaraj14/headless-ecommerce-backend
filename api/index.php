@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Artisan;
 
 define('LARAVEL_START', microtime(true));
 
+putenv('LOG_CHANNEL=stderr');
+putenv('LOG_PATH=php://stderr');
+
 // Register the Composer autoloader...
 require __DIR__ . '/../vendor/autoload.php';
 
