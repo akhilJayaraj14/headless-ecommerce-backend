@@ -1,11 +1,12 @@
 <?php
 
+use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
-// Ensure writable /tmp storage paths for serverless
+// Writable storage directories for AWS Lambda / Vercel
 $storageDirs = [
     '/tmp/storage/app/public',
     '/tmp/storage/framework/cache/data',
@@ -41,5 +42,17 @@ require __DIR__ . '/../vendor/autoload.php';
 
 /** @var Application $app */
 $app = require_once __DIR__ . '/../bootstrap/app.php';
+
+// Initialize Console Kernel to run SQLite migration & seed in /tmp if empty
+try {
+    if (!file_exists('/tmp/database.sqlite') || filesize('/tmp/database.sqlite') === 0) {
+        @touch('/tmp/database.sqlite');
+        $console = $app->make(ConsoleKernel::class);
+        $console->call('migrate', ['--force' => true]);
+        $console->call('db:seed', ['--force' => true]);
+    }
+} catch (\Throwable $e) {
+    // Ignore seeding error in serverless environment
+}
 
 $app->handleRequest(Request::capture());
