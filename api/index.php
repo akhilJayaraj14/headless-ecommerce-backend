@@ -1,21 +1,20 @@
 <?php
 
-// Vercel Serverless Entrypoint for Laravel REST API
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+
+define('LARAVEL_START', microtime(true));
+
+// Register the Composer autoloader...
 require __DIR__ . '/../vendor/autoload.php';
 
-$app = require_once __DIR__ . '/../bootstrap/app.php';
-
-// Ensure /tmp directory structure for serverless execution
+// Prepare SQLite database in /tmp for serverless execution
 if (!file_exists('/tmp/database.sqlite') && file_exists(__DIR__ . '/../database/database.sqlite')) {
-    copy(__DIR__ . '/../database/database.sqlite', '/tmp/database.sqlite');
+    @copy(__DIR__ . '/../database/database.sqlite', '/tmp/database.sqlite');
 }
 
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+// Bootstrap Laravel and handle request...
+/** @var Application $app */
+$app = require_once __DIR__ . '/../bootstrap/app.php';
 
-$response = $kernel->handle(
-    $request = Illuminate\Http\Request::capture()
-);
-
-$response->send();
-
-$kernel->terminate($request, $response);
+$app->handleRequest(Request::capture());
