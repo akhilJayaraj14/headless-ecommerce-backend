@@ -6,21 +6,21 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.3",
-        "laravel/framework": "^13.8",
+        "php": "^8.2",
+        "laravel/framework": "^11.0|^12.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^3.0",
-        "predis/predis": "^3.5",
-        "stripe/stripe-php": "^21.0"
+        "laravel/tinker": "^2.9|^3.0",
+        "predis/predis": "^2.2|^3.5",
+        "stripe/stripe-php": "^16.0|^21.0",
+        "symfony/http-foundation": "^7.0",
+        "symfony/http-kernel": "^7.0",
+        "symfony/console": "^7.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
-        "laravel/pail": "^1.2.5",
-        "laravel/pao": "^1.0.6",
-        "laravel/pint": "^1.27",
         "mockery/mockery": "^1.6",
-        "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^12.5.12"
+        "nunomaduro/collision": "^8.0",
+        "phpunit/phpunit": "^11.0|^12.0"
     },
     "autoload": {
         "psr-4": {
