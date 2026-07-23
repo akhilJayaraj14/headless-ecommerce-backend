@@ -21,6 +21,7 @@ foreach ($storageDirs as $dir) {
     }
 }
 
+putenv('APP_DEBUG=true');
 putenv('LOG_CHANNEL=stderr');
 putenv('LOG_PATH=php://stderr');
 putenv('CACHE_STORE=array');
@@ -28,6 +29,7 @@ putenv('SESSION_DRIVER=array');
 putenv('DB_CONNECTION=sqlite');
 putenv('DB_DATABASE=/tmp/database.sqlite');
 
+$_ENV['APP_DEBUG'] = 'true';
 $_ENV['LOG_CHANNEL'] = 'stderr';
 $_ENV['LOG_PATH'] = 'php://stderr';
 $_ENV['CACHE_STORE'] = 'array';
