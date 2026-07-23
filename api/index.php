@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
-// Writable storage directories for AWS Lambda / Vercel
+// Ensure writable /tmp storage paths for serverless
 $storageDirs = [
     '/tmp/storage/app/public',
     '/tmp/storage/framework/cache/data',
@@ -40,14 +40,4 @@ require __DIR__ . '/../vendor/autoload.php';
 /** @var Application $app */
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
-$app->useStoragePath('/tmp/storage');
-
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-
-$response = $kernel->handle(
-    $request = Request::capture()
-);
-
-$response->send();
-
-$kernel->terminate($request, $response);
+$app->handleRequest(Request::capture());
