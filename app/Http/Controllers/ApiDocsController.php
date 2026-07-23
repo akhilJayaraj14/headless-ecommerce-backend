@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class ApiDocsController extends Controller
 {
     public function docs(): Response
     {
-        $specUrl = url('/api/v1/openapi.json');
+        $specJson = json_encode($this->getOpenApiSpec(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         $html = <<<HTML
 <!doctype html>
@@ -30,7 +31,9 @@ class ApiDocsController extends Controller
   <body>
     <script
       id="api-reference"
-      data-url="{$specUrl}"></script>
+      type="application/json">
+{$specJson}
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
   </body>
 </html>
@@ -39,9 +42,14 @@ HTML;
         return response($html, 200, ['Content-Type' => 'text/html']);
     }
 
-    public function spec()
+    public function spec(): JsonResponse
     {
-        $spec = [
+        return response()->json($this->getOpenApiSpec());
+    }
+
+    protected function getOpenApiSpec(): array
+    {
+        return [
             'openapi' => '3.0.3',
             'info' => [
                 'title' => 'Enterprise Headless eCommerce REST API',
@@ -205,7 +213,5 @@ HTML;
                 ],
             ],
         ];
-
-        return response()->json($spec);
     }
 }
